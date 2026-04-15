@@ -50,9 +50,8 @@ public class GlobalExceptionHandler {
     //Ошибки на этапе парсинга входящего json
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Object> handleJsonErrors(HttpMessageNotReadableException ex) {
-        if (ex.getCause() instanceof InvalidFormatException) {
+        if (ex.getCause() instanceof InvalidFormatException matchEx) {
             Map<Object, Object> errorsResponse = new HashMap<>();
-            InvalidFormatException matchEx = (InvalidFormatException) ex.getCause();
             // Проверяем, что ошибка связана с Enum
             if (matchEx.getTargetType() != null && matchEx.getTargetType().isEnum()) {
                 String message = String.format("Значение '%s' недопустимо. Разрешенные значения: %s",

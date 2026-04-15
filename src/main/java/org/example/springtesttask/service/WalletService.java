@@ -1,6 +1,5 @@
 package org.example.springtesttask.service;
 
-import jakarta.validation.Valid;
 import org.example.springtesttask.dto.ProcessWalletDto;
 
 import java.util.UUID;
