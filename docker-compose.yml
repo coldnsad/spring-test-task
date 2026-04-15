@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:17
+    container_name: postgres_wallet_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DB_PASSWORD}
+      POSTGRES_DB: wallet_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Healthcheck для того, чтобы убедиться что БД запущена и уже затем запускать spring-app
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U myuser -d wallet_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  spring-app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_LIQUIBASE_CONTEXTS: dev
+      SPRING_LIQUIBASE_ENABLED: true
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres_data:

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-test-task
+  datasource:
+    url: jdbc:postgresql://localhost:5433/wallet_db
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      # Размер пула соединений(одновременных подключений) с БД
+      maximum-pool-size: 50
+  liquibase:
+    # Отправная точка для работы liquibase
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    enabled: ${SPRING_LIQUIBASE_ENABLED:true}
+    # Контекст по умолчанию dev, может быть переопределён в docker-compose
+    contexts: ${SPRING_LIQUIBASE_CONTEXTS:dev}
+  jpa:
+    hibernate:
+      # Убираем update, передавая работу по подготовке БД liquibase
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}

@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      # Данный шаг миграции для любого контекста, свойство context: не указано
+      file: changes/001-create-wallet-table.sql
+      relativeToChangelogFile: true
+  - include:
+      # Данный шаг миграции выполнится только для контекста dev
+      file: changes/002-add-test-wallets.sql
+      relativeToChangelogFile: true
+      context: dev
+  - include:
+      # Данный шаг миграции выполнится только для контекста prod
+      file: changes/003-add-prod-wallets.sql
+      relativeToChangelogFile: true
+      context: prod
